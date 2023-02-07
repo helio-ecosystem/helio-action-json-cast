@@ -1,6 +1,8 @@
 package helio.actions;
 
 import org.json.XML;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import com.google.gson.JsonObject;
 
@@ -22,6 +24,11 @@ public class JsonCast implements Action{
 	public String run(String values) throws ActionException {
 		if(format.equals("xml"))
 			return XML.toJSONObject(values).toString();
+		else if(format.equals("html")) {
+			Document document = Jsoup.parse(values);
+			document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+			return XML.toJSONObject(document.html()).toString();
+		}
 		return values;
 	}
 
